@@ -13,7 +13,7 @@ module TestHash
   class MyHash(K, V)
     def initialize(*args)
       @used = 0
-      @allocated = 4
+      @allocated = 3
       @data = Slice((Status | {K, V})).new(1 << @allocated) { Status::Empty.as((Status | {K, V})) }
     end
 
