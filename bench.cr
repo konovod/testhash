@@ -28,7 +28,8 @@ def try(hsh, n)
   sum
 end
 
-raise "" unless try(Hash(Int32, Int32).new(nil), 100) == try(TestHash::MyHash(Int32, Int32).new(nil), 100)
+p try(Hash(Int32, Int32).new(nil), 100)
+p try(TestHash::MyHash(Int32, Int32).new(nil), 100)
 
 x = 0
 Benchmark.ips do |bench|
