@@ -1,4 +1,5 @@
 require "./src/testhash"
+require "./src/robinhash"
 require "benchmark"
 
 def try(hsh, n)
@@ -30,18 +31,22 @@ end
 
 p try(Hash(Int32, Int32).new(nil), 100)
 p try(TestHash::MyHash(Int32, Int32).new(nil), 100)
+p try(TestHash::RobinHash(Int32, Int32).new(nil), 100)
 
 x = 0
 Benchmark.ips do |bench|
   bench.report("default") { x += try(Hash(Int32, Int32).new(nil), 10) }
   bench.report("my") { x += try(TestHash::MyHash(Int32, Int32).new(nil), 10) }
+  bench.report("robin") { x += try(TestHash::RobinHash(Int32, Int32).new(nil), 10) }
 end
 Benchmark.ips do |bench|
   bench.report("default avg") { x += try(Hash(Int32, Int32).new(nil), 125) }
   bench.report("my avg") { x += try(TestHash::MyHash(Int32, Int32).new(nil), 125) }
+  bench.report("robin avg") { x += try(TestHash::RobinHash(Int32, Int32).new(nil), 125) }
 end
 Benchmark.ips do |bench|
   bench.report("default big") { x += try(Hash(Int32, Int32).new(nil), 10000) }
   bench.report("my big") { x += try(TestHash::MyHash(Int32, Int32).new(nil), 10000) }
+  bench.report("robin big") { x += try(TestHash::RobinHash(Int32, Int32).new(nil), 10000) }
 end
 p x
