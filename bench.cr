@@ -29,39 +29,6 @@ def try(hsh, n)
   sum
 end
 
-def try2(hsh1, hsh2, iter, n)
-  sum1 = sum2 = 0
-  iter.times do |i|
-    rnd = Random.new(i)
-    # addition
-    rnd.rand(n/2).times do |i|
-      v = rnd.rand(n)
-      hsh1[v] = i*i
-      hsh2[v] = i*i
-    end
-    # deleting
-    rnd.rand(n/2).times do |i|
-      v = rnd.rand(n)
-      hsh1.delete(v) { }
-      hsh2.delete(v) { }
-    end
-    # lookup after changes
-    rnd.rand(n/2).times do |i|
-      v = rnd.rand(n)
-      sum1 += hsh1[v]? || 0
-      sum2 += hsh2[v]? || 0
-      if sum1 != sum2
-        pp v, hsh1[v]?, hsh2[v]?
-        raise ""
-      end
-    end
-  end
-end
-
-try2(Hash(Int32, Int32).new(nil), TestHash::MyHash(Int32, Int32).new(nil), 30, 10000)
-# try2(Hash(Int32, Int32).new(nil), TestHash::RobinHash(Int32, Int32).new(nil), 30, 10000)
-# p try2(TestHash::RobinHash(Int32, Int32).new(nil), 100, 100)
-#
 x = 0
 Benchmark.ips do |bench|
   bench.report("default") { x += try(Hash(Int32, Int32).new(nil), 10) }

@@ -7,10 +7,13 @@ module TestHash
   end
 
   class MyHash(K, V)
-    MAX_LOAD_FACTOR = 75
-    MAX_TOMB_FACTOR = 75
+    MAX_LOAD_FACTOR = 50
+    MAX_TOMB_FACTOR = 80
 
     # @check = Hash(K, V).new
+    # def sanity
+    #   @check.values.sum == @data.sum { |x| x.is_a?(Status) ? 0 : x[1] }
+    # end
 
     def initialize(*args)
       @used = 0
@@ -18,10 +21,6 @@ module TestHash
       @allocated = 3
       @data = Slice((Status | {K, V})).new(1 << @allocated) { Status::Empty.as((Status | {K, V})) }
     end
-
-    # def sanity
-    #   @check.values.sum == @data.sum { |x| x.is_a?(Status) ? 0 : x[1] }
-    # end
 
     def []=(key, value)
       index = lookup(key, false)
@@ -86,9 +85,13 @@ module TestHash
     end
 
     @[AlwaysInline]
+    def mask
+      (1 << @allocated) - 1
+    end
+
+    @[AlwaysInline]
     private def lookup(key, search)
-      mask = (1 << @allocated) - 1
-      index = key & mask
+      index = key.hash & mask
       delta = 1
       loop do
         case v = @data[index]
