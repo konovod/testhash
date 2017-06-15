@@ -15,8 +15,8 @@ module TestHash
 
     def []=(key, value)
       @used += 1
-      rehash(@allocated + 1) if @used > MAX_LOAD_FACTOR*(1 << @allocated)/100
       index = lookup_robin(key, value)
+      rehash(@allocated + 1) if @used > MAX_LOAD_FACTOR*(1 << @allocated)/100
     end
 
     def []?(key)
@@ -31,10 +31,10 @@ module TestHash
     end
 
     def delete(key, &block)
-      @used -= 1
       return unless index = lookup_search(key)
       v = @data[index]
       unless v.is_a?(UInt32)
+        @used -= 1
         @data[index] = dib(v[0].hash, index)
         rehash(@allocated - 1) if @allocated > 3 && @used < MIN_LOAD_FACTOR*(1 << @allocated)/100
       end

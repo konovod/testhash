@@ -8,7 +8,7 @@ module TestHash
 
   class MyHash(K, V)
     MAX_LOAD_FACTOR = 75
-    MIN_LOAD_FACTOR =  5
+    MAX_TOMB_FACTOR = 75
 
     # @check = Hash(K, V).new
 
@@ -68,12 +68,12 @@ module TestHash
         @used -= 1
         @tombs += 1
         @data[index] = Status::Tombstone
-        rehash(@allocated - 1) if @allocated > 3 && @used < MIN_LOAD_FACTOR*(1 << @allocated)/100
+        rehash(@allocated) if @tombs > MAX_TOMB_FACTOR*(@used + @tombs) / 100
       end
     end
 
     private def rehash(new_size)
-      # p "rehash #{new_size}"
+      # p "#{new_size <= @allocated ? "shrink" : "growth"} #{new_size}" if new_size <= @allocated
       # @check.clear
       old = @data
       @allocated = new_size

@@ -59,6 +59,7 @@ def try2(hsh1, hsh2, iter, n)
 end
 
 try2(Hash(Int32, Int32).new(nil), TestHash::MyHash(Int32, Int32).new(nil), 30, 10000)
+# try2(Hash(Int32, Int32).new(nil), TestHash::RobinHash(Int32, Int32).new(nil), 30, 10000)
 # p try2(TestHash::RobinHash(Int32, Int32).new(nil), 100, 100)
 #
 x = 0
