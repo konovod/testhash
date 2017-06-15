@@ -2,7 +2,7 @@ require "./testhash/*"
 
 module TestHash
   class RobinHash(K, V)
-    MAX_LOAD_FACTOR = 80
+    MAX_LOAD_FACTOR = 50
 
     # @check = Hash(K, V).new
 
@@ -78,20 +78,20 @@ module TestHash
       loop do
         if v = @data[index]
           cur_offset = dib(v[0].hash, index)
+          return nil if cur_offset < offset
           return index if cur_offset == offset && v[0] == key
           # if cur_offset < offset && @check[key]?
           #   p @data.map_with_index { |x, i| x ? [x[0].hash, i, dib(x[0].hash, i)] : nil }
           #   pp key, index, offset, cur_offset
           #   raise ""
           # end
-          return nil if cur_offset < offset
         else
           # raise "" if @check[key]?
           return nil
         end
         index = (index + 1) & mask
         offset += 1
-        raise "NO" if offset > mask
+        # raise "NO" if offset > mask
       end
     end
 
@@ -121,7 +121,7 @@ module TestHash
         end
         index = (index + 1) & mask
         offset += 1
-        raise "NO" if offset > mask
+        # raise "NO" if offset > mask
       end
     end
   end
