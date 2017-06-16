@@ -78,4 +78,26 @@ module TestHash
       end
     end
   end
+
+  class Overhead(K, V)
+    @somek : K?
+    @somev : V?
+
+    def initialize(*args)
+    end
+
+    def []=(key, value)
+      @somek = key
+      @somev = value
+    end
+
+    def []?(key)
+      return @somev
+    end
+
+    def delete(key, &block)
+      @somek = key
+      yield
+    end
+  end
 end

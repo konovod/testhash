@@ -2,11 +2,14 @@ require "./testhash/*"
 
 module TestHash
   class RobinHash(K, V)
-    MAX_LOAD_FACTOR = 50
+    MAX_LOAD_FACTOR = 70
+
+    private getter mask : Int32
 
     def initialize(*args)
       @used = 0
       @allocated = 3
+      @mask = (1 << @allocated) - 1
       @data = Slice({K, V}?).new(1 << @allocated) { nil.as({K, V}?) }
     end
 
@@ -42,6 +45,7 @@ module TestHash
     private def rehash(new_size)
       old = @data
       @allocated = new_size
+      @mask = (1 << @allocated) - 1
       @data = Slice({K, V}?).new(1 << @allocated) { nil.as({K, V}?) }
       @used = 0
       old.each do |x|
@@ -50,12 +54,7 @@ module TestHash
     end
 
     @[AlwaysInline]
-    def mask
-      (1 << @allocated) - 1
-    end
-
-    @[AlwaysInline]
-    def dib(hash, index)
+    private def dib(hash, index)
       UInt32.new(index - hash) & mask
     end
 
