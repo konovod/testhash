@@ -4,12 +4,6 @@ module TestHash
   class RobinHash(K, V)
     MAX_LOAD_FACTOR = 50
 
-    # @check = Hash(K, V).new
-
-    # def sanity
-    #   @check.values.sum == @data.sum { |x| x ? x[1] : 0 }
-    # end
-
     def initialize(*args)
       @used = 0
       @allocated = 3
@@ -18,8 +12,6 @@ module TestHash
 
     def []=(key, value)
       lookup_robin(key, value)
-      # @check[key] = value
-      # raise "" unless sanity
       rehash(@allocated + 1) if @used > MAX_LOAD_FACTOR*(1 << @allocated)/100
     end
 
@@ -45,13 +37,9 @@ module TestHash
         @data[oldindex] = @data[index]
       end
       @data[oldindex] = nil
-      # @check.delete(key) { yield }
-      # raise "" unless sanity
     end
 
     private def rehash(new_size)
-      # @check.clear
-      # p "#{new_size <= @allocated ? "shrink" : "growth"} #{new_size}"
       old = @data
       @allocated = new_size
       @data = Slice({K, V}?).new(1 << @allocated) { nil.as({K, V}?) }
@@ -80,18 +68,11 @@ module TestHash
           cur_offset = dib(v[0].hash, index)
           return nil if cur_offset < offset
           return index if cur_offset == offset && v[0] == key
-          # if cur_offset < offset && @check[key]?
-          #   p @data.map_with_index { |x, i| x ? [x[0].hash, i, dib(x[0].hash, i)] : nil }
-          #   pp key, index, offset, cur_offset
-          #   raise ""
-          # end
         else
-          # raise "" if @check[key]?
           return nil
         end
         index = (index + 1) & mask
         offset += 1
-        # raise "NO" if offset > mask
       end
     end
 
@@ -121,10 +102,7 @@ module TestHash
         end
         index = (index + 1) & mask
         offset += 1
-        # raise "NO" if offset > mask
       end
     end
   end
-
-  # TODO Put your code here
 end
