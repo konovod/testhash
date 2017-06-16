@@ -13,19 +13,6 @@ module TestHash
       @data = Slice({K, V}?).new(1 << @allocated) { nil.as({K, V}?) }
     end
 
-    def []=(key, value)
-      lookup_robin(key, value)
-      rehash(@allocated + 1) if @used > MAX_LOAD_FACTOR*(1 << @allocated)/100
-    end
-
-    def []?(key)
-      if index = lookup_search(key)
-        @data[index].not_nil![1]
-      else
-        return nil
-      end
-    end
-
     def delete(key, &block)
       return unless index = lookup_search(key)
       v = @data[index]
@@ -75,8 +62,23 @@ module TestHash
       end
     end
 
-    @[AlwaysInline]
-    private def lookup_robin(key, value)
+    def []?(key)
+      index = key.hash & mask
+      offset = 0
+      loop do
+        if v = @data[index]
+          cur_offset = dib(v[0].hash, index)
+          return nil if cur_offset < offset
+          return v[1] if cur_offset == offset && v[0] == key
+        else
+          return nil
+        end
+        index = (index + 1) & mask
+        offset += 1
+      end
+    end
+
+    def []=(key, value)
       offset = 0
       index = key.hash & mask
       loop do
@@ -84,6 +86,7 @@ module TestHash
         unless v
           @used += 1
           @data[index] = {key, value}
+          rehash(@allocated + 1) if @used > MAX_LOAD_FACTOR*(1 << @allocated)/100
           return
         end
         old_offset = dib(v[0].hash, index)
