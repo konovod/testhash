@@ -2,20 +2,22 @@
 
 ```
 [andrew@lenovo testhash]$ crystal bench.cr --release
-default  32.64k ( 30.64µs) (±15.04%)  1.10× slower
-     my  34.18k ( 29.25µs) (±19.72%)  1.05× slower
-  robin  35.99k ( 27.79µs) (±16.26%)       fastest
-default avg  15.01k ( 66.64µs) (±12.28%)       fastest
-     my avg  14.24k ( 70.23µs) (±14.42%)  1.05× slower
-  robin avg  14.31k (  69.9µs) (±15.99%)  1.05× slower
-GC Warning: Repeated allocation of very large block (appr. size 36864):
-	May lead to memory leak and poor performance
-...
-GC Warning: Repeated allocation of very large block (appr. size 36864):
-	May lead to memory leak and poor performance
-default big 369.95  (   2.7ms) (±16.68%)  1.31× slower
-     my big 459.17  (  2.18ms) (± 1.74%)  1.06× slower
-  robin big 485.28  (  2.06ms) (± 2.90%)       fastest
--108523014
-[andrew@lenovo testhash]$
+-----------setup 10------------
+               Hash(Int32, Int32) 663.61k (  1.51µs) (±20.05%)  1.19× slower
+TestHash::RobinHash(Int32, Int32) 788.06k (  1.27µs) (±21.55%)       fastest
+-----------full 10------------
+               Hash(Int32, Int32) 126.62k (   7.9µs) (±16.07%)  1.18× slower
+TestHash::RobinHash(Int32, Int32) 149.83k (  6.67µs) (±17.48%)       fastest
+-----------setup 125------------
+               Hash(Int32, Int32)  44.97k ( 22.24µs) (±18.41%)       fastest
+TestHash::RobinHash(Int32, Int32)   33.5k ( 29.85µs) (±11.42%)  1.34× slower
+-----------full 125------------
+               Hash(Int32, Int32)    7.7k (129.92µs) (±14.26%)  1.41× slower
+TestHash::RobinHash(Int32, Int32)  10.86k (  92.1µs) (±15.89%)       fastest
+-----------setup 1000------------
+               Hash(Int32, Int32)   5.32k (187.89µs) (±12.51%)       fastest
+TestHash::RobinHash(Int32, Int32)   4.86k (205.58µs) (±15.93%)  1.09× slower
+-----------full 1000------------
+               Hash(Int32, Int32)  948.4  (  1.05ms) (±16.21%)  1.39× slower
+TestHash::RobinHash(Int32, Int32)   1.32k (759.96µs) (±14.79%)       fastest
 ```
