@@ -7,13 +7,16 @@ module TestHash
   end
 
   class MyHash(K, V)
-    MAX_LOAD_FACTOR = 50
+    MAX_LOAD_FACTOR = 70
     MAX_TOMB_FACTOR = 80
+
+    private getter mask : Int32
 
     def initialize(*args)
       @used = 0
       @tombs = 0
       @allocated = 3
+      @mask = (1 << @allocated) - 1
       @data = Slice((Status | {K, V})).new(1 << @allocated) { Status::Empty.as((Status | {K, V})) }
     end
 
@@ -49,17 +52,13 @@ module TestHash
     private def rehash(new_size)
       old = @data
       @allocated = new_size
+      @mask = (1 << @allocated) - 1
       @data = Slice((Status | {K, V})).new(1 << @allocated) { Status::Empty.as((Status | {K, V})) }
       @used = 0
       @tombs = 0
       old.each do |x|
         self[x[0]] = x[1] unless x.is_a?(Status)
       end
-    end
-
-    @[AlwaysInline]
-    def mask
-      (1 << @allocated) - 1
     end
 
     @[AlwaysInline]

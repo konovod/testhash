@@ -62,11 +62,11 @@ end
 
 def all_tests(n)
   do_bench "setup #{n}", {initial: n, delete_found: 0, delete_notfound: 0, inserts: 0, lookup_found: 0, lookup_notfound: 0}
-  # do_bench "lookup_found #{n}", {initial: n, delete_found: 0, delete_notfound: 0, inserts: 0, lookup_found: n, lookup_notfound: 0}
-  # do_bench "lookup_notfound #{n}", {initial: n, delete_found: 0, delete_notfound: 0, inserts: 0, lookup_found: 0, lookup_notfound: n}
-  # do_bench "delete_found #{n}", {initial: n, delete_found: n, delete_notfound: 0, inserts: 0, lookup_found: 0, lookup_notfound: 0}
-  # do_bench "delete_notfound #{n}", {initial: n, delete_found: 0, delete_notfound: n, inserts: 0, lookup_found: 0, lookup_notfound: 0}
-  # do_bench "inserts #{n}", {initial: n, delete_found: n/2, delete_notfound: 0, inserts: n/2, lookup_found: 0, lookup_notfound: 0}
+  #  do_bench "lookup_found #{n}", {initial: n, delete_found: 0, delete_notfound: 0, inserts: 0, lookup_found: n, lookup_notfound: 0}
+  #  do_bench "lookup_notfound #{n}", {initial: n, delete_found: 0, delete_notfound: 0, inserts: 0, lookup_found: 0, lookup_notfound: n}
+  #  do_bench "delete_found #{n}", {initial: n, delete_found: n, delete_notfound: 0, inserts: 0, lookup_found: 0, lookup_notfound: 0}
+  #  do_bench "delete_notfound #{n}", {initial: n, delete_found: 0, delete_notfound: n, inserts: 0, lookup_found: 0, lookup_notfound: 0}
+  #  do_bench "inserts #{n}", {initial: n, delete_found: n/2, delete_notfound: 0, inserts: n/2, lookup_found: 0, lookup_notfound: 0}
   do_bench "full #{n}", {initial: n, delete_found: n/2, delete_notfound: n/2, inserts: n/2, lookup_found: n, lookup_notfound: n}
 end
 

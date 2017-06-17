@@ -10,7 +10,7 @@ module TestHash
       @used = 0
       @allocated = 3
       @mask = (1 << @allocated) - 1
-      @data = Slice({K, V}?).new(1 << @allocated) { nil.as({K, V}?) }
+      @data = Pointer({K, V}?).malloc(1 << @allocated)
     end
 
     def delete(key, &block)
@@ -22,8 +22,7 @@ module TestHash
         oldindex = index
         index = (index + 1) & mask
         break unless v = @data[index]
-        cur_offset = dib(v[0].hash, index)
-        break if cur_offset == 0
+        break if v[0].hash & mask == index
         @data[oldindex] = @data[index]
       end
       @data[oldindex] = nil
@@ -31,11 +30,13 @@ module TestHash
 
     private def rehash(new_size)
       old = @data
+      oldn = @allocated
       @allocated = new_size
       @mask = (1 << @allocated) - 1
-      @data = Slice({K, V}?).new(1 << @allocated) { nil.as({K, V}?) }
+      @data = Pointer({K, V}?).malloc(1 << @allocated)
       @used = 0
-      old.each do |x|
+      (1 << oldn).times do |i|
+        x = old[i]
         self[x[0]] = x[1] if x
       end
     end
